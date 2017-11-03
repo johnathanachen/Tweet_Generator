@@ -1,4 +1,4 @@
-#!"/Users/Johnathan/Desktop/Makeschool/Class Assignments/CS-2-Tweet-Generator/app/venv/bin/python2.7"
+#!/Users/Johnathan/Desktop/app/venv/bin/python2.7
 
 # -*- coding: utf-8 -*-
 import re

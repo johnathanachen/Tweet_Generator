@@ -1,4 +1,4 @@
-#!/Users/Johnathan/Desktop/Makeschool/Class Assignments/CS-2-Tweet-Generator/app/venv/bin/python
+#!/Users/Johnathan/Desktop/app/venv/bin/python
 
 import sys
 import getopt
