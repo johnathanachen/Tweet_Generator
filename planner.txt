@@ -1,0 +1,3 @@
+Rick and Morty
+left rick right morty, when selected, side is highlighted
+when side is selected, character talks
