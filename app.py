@@ -6,7 +6,7 @@ app = Flask(__name__)
 
 @app.route('/')
 def hello():
-    return run_sampling()
+    return "hello"
 
 
 if __name__ == '__main__':
