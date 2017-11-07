@@ -4,7 +4,7 @@ from histo_dict import *
 
 app = Flask(__name__)
 
-@app.route("/")
+@app.route('/')
 def hello():
     return run_sampling()
 
