@@ -1,5 +1,5 @@
 import bs4 as bs
-from urllib.request import urlopen
+# from urllib.request import urlopen
 import re
 
 def get_transcript_html():
