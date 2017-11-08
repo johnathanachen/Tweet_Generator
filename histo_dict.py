@@ -55,9 +55,4 @@ sort_histogram(histo_dict)
 
 
 
-    # print(transcript_list)
-    # list_html = transcript_html.split('price')
-
-    # <b>Morty:</b> *rubs his eyes* What, Rick? What’s going on?<br/>
-
 get_transcript_html()
