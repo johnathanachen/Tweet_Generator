@@ -1,6 +1,5 @@
 from flask import Flask
-from sampling import *
-from histo_dict import *
+
 
 app = Flask(__name__)
 
