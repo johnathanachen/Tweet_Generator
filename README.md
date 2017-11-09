@@ -6,7 +6,7 @@ Tweet Generator
 
 ## Q&A
 
-<b>What are the key features of the application? Are these clearly separated into their own files, classes, and/or modules?<b>
+<b>What are the key features of the application? Are these clearly separated into their own files, classes, and/or modules?</b>
 This application has the ability to generate random strings of words from a collection of speech transcripts scarped from the web by implmenting the Markov chain method.
 
 ### Understanding File Functions and Variable Names
