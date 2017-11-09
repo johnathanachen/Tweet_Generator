@@ -16,14 +16,28 @@ This application has the ability to generate random strings of words from a coll
 <br>
 Listed below in 'Architecture' is a description of each file and every variable should have pretty clear naming to be easily readable and understandable. 
 
-### Scopes of Variables
+<b>What are the scopes of variables and are they appropriate for their use case? If there are global variables, why are they needed?</b>
+<br>
+<br>
 There is no global variables, each variable is within the scope of the class or function it resides in.
 
-### Functions and Side Effects
-- Are the functions small and clearly specified, with as few side effects as possible?
-- Are there functions that could be better organized in an Object-Oriented Programming style by defining them as methods of a class?
-- Can files be used as both modules and as scripts?
-- Do modules all depend on each other or can they be used independently?
+<b>Are the functions small and clearly specified, with as few side effects as possible?</b>
+<br>
+<br>
+Each function handles one action and is clearly specified with naming conventions and comment descriptions. There is minimal to no side effects.
+
+<b>Are there functions that could be better organized in an Object-Oriented Programming style by defining them as methods of a class?</b>
+<br>
+<br>
+The file Architecture is organized in OOP style
+
+<b>Can files be used as both modules and as scripts?</b>
+<br>
+<br>
+
+<b>Do modules all depend on each other or can they be used independently?</b>
+<br>
+<br>
 
 
 ## Architecture
