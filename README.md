@@ -5,7 +5,7 @@
 </h1>
 
 ### Description
-This is a random tweet generator that generate short tweets using the Markov chain method and all of Trump's speech transcripts.
+This is a random tweet generator that generates short tweets using the Markov chain method from all of Trump's speech transcripts.
 
 ## Q&A
 <b>What are the key features of the application? Are these clearly separated into their own files, classes, and/or modules?</b>
@@ -36,10 +36,12 @@ The file Architecture is organized in OOP style
 <b>Can files be used as both modules and as scripts?</b>
 <br>
 <br>
+The modules and scripts are sepearted into thier own folders
 
 <b>Do modules all depend on each other or can they be used independently?</b>
 <br>
 <br>
+Modules can be used independently
 
 
 ## Architecture
