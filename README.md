@@ -8,9 +8,12 @@ Tweet Generator
 
 <b>What are the key features of the application? Are these clearly separated into their own files, classes, and/or modules?</b>
 <br>
+<br>
 This application has the ability to generate random strings of words from a collection of speech transcripts scarped from the web by implmenting the Markov chain method.
 
-### Understanding File Functions and Variable Names
+<b>Are the names of files, modules, functions, and variables appropriate and accurate? Would a new programmer be able to understand the names without too much contextual knowledge?</b>
+<br>
+<br>
 Listed below in 'Architecture' is a description of each file and every variable should have pretty clear naming to be easily readable and understandable. 
 
 ### Scopes of Variables
