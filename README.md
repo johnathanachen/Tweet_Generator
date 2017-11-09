@@ -5,7 +5,7 @@ Tweet Generator
 </h1>
 
 ## Q&A
-```
+
 ### Key Features of the Application
 This application has the ability to generate random strings of words from a collection of speech transcripts scarped from the web by implmenting the Markov chain method.
 
@@ -20,7 +20,7 @@ There is no global variables, each variable is within the scope of the class or 
 - Are there functions that could be better organized in an Object-Oriented Programming style by defining them as methods of a class?
 - Can files be used as both modules and as scripts?
 - Do modules all depend on each other or can they be used independently?
-```
+
 
 ## Architecture
 ```python
