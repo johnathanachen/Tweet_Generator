@@ -4,17 +4,23 @@
 Tweet Generator
 </h1>
 
+## Q&A
+```
 ### Key Features of the Application
-The Key features of this application is the ability to generate random words from a collection of speech transcripts and develop a sentence by implementing the Markov chain.
+This application has the ability to generate random strings of words from a collection of speech transcripts scarped from the web by implmenting the Markov chain method.
 
 ### Understanding File Functions and Variable Names
 Listed below in 'Architecture' is a description of each file and every variable should have pretty clear naming to be easily readable and understandable. 
+
+### Scopes of Variables
+There is no global variables, each variable is within the scope of the class or function it resides in.
 
 - What are the scopes of variables and are they appropriate for their use case? If there are global variables, why are they needed?
 - Are the functions small and clearly specified, with as few side effects as possible?
 - Are there functions that could be better organized in an Object-Oriented Programming style by defining them as methods of a class?
 - Can files be used as both modules and as scripts?
 - Do modules all depend on each other or can they be used independently?
+```
 
 ## Architecture
 ```python
