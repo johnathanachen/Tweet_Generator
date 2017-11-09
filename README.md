@@ -4,8 +4,11 @@
 Tweet Generator
 </h1>
 
-- What are the key features of the application? Are these clearly separated into their own files, classes, and/or modules?
-- Are the names of files, modules, functions, and variables appropriate and accurate? Would a new programmer be able to understand the names without too much contextual knowledge?
+### Key Features of the Application
+The Key features of this application is the ability to generate random words from a collection of speech transcripts and develop a sentence by implementing the Markov chain.
+### Understanding File Functions and Variable Names
+Listed below in 'Architecture' is a description of each file and every variable should have pretty clear naming to be easily readable and understandable. 
+
 - What are the scopes of variables and are they appropriate for their use case? If there are global variables, why are they needed?
 - Are the functions small and clearly specified, with as few side effects as possible?
 - Are there functions that could be better organized in an Object-Oriented Programming style by defining them as methods of a class?
