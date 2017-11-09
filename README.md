@@ -13,9 +13,11 @@ Tweet Generator
 - Do modules all depend on each other or can they be used independently?
 
 ## Architecture
+```python
 app.py          # main script, uses other modules to generate sentences
 cleanup.py      # module for cleaning up source text
 tokenize.py     # module for creating lists of tokens from a text
 word_count.py   # module for generating histograms from a list of tokens
 sample.py       # module for generating a sample word from a histogram
 sentence.py     # module for generating a sentence from a histogram
+```
