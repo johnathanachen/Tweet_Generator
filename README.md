@@ -6,6 +6,7 @@ Tweet Generator
 
 ### Key Features of the Application
 The Key features of this application is the ability to generate random words from a collection of speech transcripts and develop a sentence by implementing the Markov chain.
+
 ### Understanding File Functions and Variable Names
 Listed below in 'Architecture' is a description of each file and every variable should have pretty clear naming to be easily readable and understandable. 
 
