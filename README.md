@@ -3,8 +3,8 @@
 <img width="200px" src="https://upload.wikimedia.org/wikipedia/en/thumb/4/47/Twitter_2010_logo_-_from_Commons.svg/1024px-Twitter_2010_logo_-_from_Commons.svg.png">
 <br>
 </h1>
-
-### Q&A
+This is a random tweet generator that generate short tweets using the Markov chain method and all of Trump's speech transcripts.
+## Q&A
 <b>What are the key features of the application? Are these clearly separated into their own files, classes, and/or modules?</b>
 <br>
 <br>
