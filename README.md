@@ -1,5 +1,6 @@
 <h1 align="center">
 <img width="200px" src="https://upload.wikimedia.org/wikipedia/en/thumb/4/47/Twitter_2010_logo_-_from_Commons.svg/1024px-Twitter_2010_logo_-_from_Commons.svg.png">
+<br>
 Tweet Generator
 </h1>
 
