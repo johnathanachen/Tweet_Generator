@@ -215,7 +215,23 @@ Add Score
 }
 
 .plus-one {
-  color: #3f3f3f;
+  color: #53D869;
+  position: absolute;
+  left: 50%;
+  -webkit-transform: translate(-50%, -50%);
+          transform: translate(-50%, -50%);
+  -webkit-animation-name: fade-in-up;
+          animation-name: fade-in-up;
+  -webkit-animation-duration: 3s;
+          animation-duration: 3s;
+  -webkit-animation-iteration-count: 1;
+          animation-iteration-count: 1;
+  -webkit-animation-timing-function: ease;
+          animation-timing-function: ease;
+}
+
+.minus-one {
+  color: #FC3D39;
   position: absolute;
   left: 50%;
   -webkit-transform: translate(-50%, -50%);

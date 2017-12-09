@@ -37,7 +37,7 @@
          <i class="fa fa-retweet"></i>
          <i class="fa fa-reply"></i>
          <div class="new-tweet">
-         <span>{{ count }} retweets</span>
+         <span class="new-count">{{ count }} Retweets</span>
         </div>
        </div>
      </div>
@@ -47,9 +47,9 @@
     --->
 
     <div class="button__wrapper">
-        <button action="{{ url_for('hello') }}" class="new-tweet-btn real-btn">Real</button>
-        <button action="{{ url_for('hello') }}" class="new-tweet-btn">New Tweet</button>
-        <button action="{{ url_for('hello') }}" class="new-tweet-btn fake-btn">Fake</button>
+        <button class="new-tweet-btn real-btn">Real</button>
+        <button class="new-tweet-btn middle-btn">New Tweet</button>
+        <button class="new-tweet-btn fake-btn">Fake</button>
     </div>
 
     <script src='https://code.jquery.com/jquery-2.2.4.min.js'></script>
