@@ -80,13 +80,43 @@ $('.middle-btn').on('click', function() {
       data: {countText},
       success: function(response) {
         $(".new-count").html(response);
-      },
-      error: function(xhr) {
-        //Do Something to handle error
       }
     });
 
 });
+
+function read_score(countText) {
+    $.ajax({
+      url: "/read_score",
+      type: "get",
+      data: {countText},
+      success: function(response) {
+        $(".text").html(response);
+      }
+    });
+};
+
+function add_score(new_score) {
+    $.ajax({
+      url: "/add_score",
+      type: "get",
+      data: {new_score},
+      success: function(response) {
+        $(".text").html(response);
+      }
+    });
+};
+
+function minus_score(new_score) {
+    $.ajax({
+      url: "/minus_score",
+      type: "get",
+      data: {new_score},
+      success: function(response) {
+        $(".text").html(response);
+      }
+    });
+};
 
 $('.real-btn').on('click', function() {
 
@@ -96,6 +126,7 @@ $('.real-btn').on('click', function() {
       type: "get",
       data: {guess},
       success: function(response) {
+
          if(response == "True") {
              $('<span class="plus-one"/>', {
                  style: 'display:none'
@@ -108,6 +139,11 @@ $('.real-btn').on('click', function() {
                    el.remove();
                  }, 2000);
                });
+
+               add_score(guess);
+               read_score(guess);
+
+
          } else if (response == "False") {
              $('<span class="minus-one"/>', {
                  style: 'display:none'
@@ -120,6 +156,10 @@ $('.real-btn').on('click', function() {
                    el.remove();
                  }, 2000);
                });
+
+               minus_score(guess);
+               read_score(guess);
+
          }
       }
     });
@@ -149,6 +189,9 @@ $('.fake-btn').on('click', function() {
                  }, 2000);
                });
 
+               minus_score(guess);
+               read_score(guess);
+
          } else if (response == "False") {
 
              $('<span class="plus-one"/>', {
@@ -162,6 +205,9 @@ $('.fake-btn').on('click', function() {
                    el.remove();
                  }, 2000);
                });
+
+               add_score(guess);
+               read_score(guess);
 
          }
       }

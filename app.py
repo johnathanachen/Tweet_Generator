@@ -15,7 +15,12 @@ def hello():
     guess_token = False
     count = read_current_count()
     new_count = write_new_count()
-    return render_template("index.html", sentence=sentence, count=count)
+    score = read_score()
+    return render_template("index.html", sentence=sentence, count=count, score=score)
+
+######################################################
+# Increase click counter
+######################################################
 
 def read_current_count():
     '''
@@ -36,6 +41,52 @@ def write_new_count():
     f = open("counter.txt", "w")
     f.write(string_format)
 
+
+######################################################
+# Add, subtract, Read score
+######################################################
+
+@app.route('/add_score', methods=['GET', 'POST'])
+def add_to_score():
+    '''
+    Add more score to file
+    '''
+    f = open("current_score.txt", "r")
+    score = f.read()
+    new_count = int(score) + 10
+    string_format = str(new_count)
+    f = open("current_score.txt", "w")
+    f.write(string_format)
+    new_score = read_score()
+    return new_score
+
+@app.route('/minus_score', methods=['GET', 'POST'])
+def subtract_score():
+    '''
+    Add more score to file
+    '''
+    f = open("current_score.txt", "r")
+    score = f.read()
+    new_count = int(score) - 10
+    string_format = str(new_count)
+    f = open("current_score.txt", "w")
+    f.write(string_format)
+    new_score = read_score()
+    return new_score
+
+@app.route('/read_score', methods=['GET', 'POST'])
+def read_score():
+    '''
+    Read score from file
+    '''
+    f = open("current_score.txt", "r")
+    score = f.read()
+    return score
+
+######################################################
+# Check if guess is right or wrong
+######################################################
+
 def read_current_guess():
     '''
     Read guess token from file
@@ -50,6 +101,10 @@ def write_new_guess(guess):
     '''
     f = open("guess_token.txt", "w")
     f.write(guess)
+
+######################################################
+# Pick new text to show
+######################################################
 
 @app.route('/pick_text', methods=['GET', 'POST'])
 def pick_text():
@@ -79,29 +134,18 @@ def correct_guess():
     guess_state = read_current_guess()
     return guess_state
 
+
+######################################################
+# Add counter and update UI
+######################################################
+
 @app.route('/new_count', methods=['GET', 'POST'])
 def new_count():
     count = read_current_count()
     new_count = write_new_count()
     return count + " retweets"
 
-# @app.route('/correct_guess', methods=['GET', 'POST'])
-# def correct_guess(guess):
-#     if guess == True:
-#         print("true")
-#     else:
-#         print("false")
 
-
-# @app.route('/real_text', methods=['GET', 'POST'])
-# def new_text():
-#     sentence = Markov().main(data, 10)
-#     return sentence
-
-# @app.route('/fake_text', methods=['GET', 'POST'])
-# def new_text():
-#     sentence = Markov().main(data, 10)
-#     return sentence
 
 
 
