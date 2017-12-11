@@ -3,6 +3,7 @@
 <head>
     <title>Donald Trump Tweet Generator</title>
     <link rel="stylesheet" href="{{ url_for('static', filename='stylesheets/style.css') }}">
+    <link rel="stylesheet" href="{{ url_for('static', filename='stylesheets/button.css') }}">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/meyer-reset/2.0/reset.min.css">
     <link rel="stylesheet" href="{{ url_for('static', filename='fa/css/font-awesome.min.css') }}">
 
@@ -47,10 +48,11 @@
     --->
 
     <div class="button__wrapper">
-        <button class="new-tweet-btn real-btn">Real</button>
-        <button class="new-tweet-btn middle-btn">New Tweet</button>
-        <button class="new-tweet-btn fake-btn">Fake</button>
+        <button class="new-tweet-btn real-btn button">Real</button>
+        <button class="new-tweet-btn middle-btn button">New Tweet</button>
+        <button class="new-tweet-btn fake-btn button">Fake</button>
     </div>
+
 
     <script src='https://code.jquery.com/jquery-2.2.4.min.js'></script>
     <script type="text/javascript" src="{{ url_for('static', filename='add_points.js') }}"></script>

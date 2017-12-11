@@ -131,7 +131,7 @@ $('.real-btn').on('click', function() {
              $('<span class="plus-one"/>', {
                  style: 'display:none'
                })
-               .html('+10')
+               .html("+10")
                .appendTo($('.add-comment'))
                .fadeIn('1000', function() {
                  var el = $(this);
@@ -148,7 +148,7 @@ $('.real-btn').on('click', function() {
              $('<span class="minus-one"/>', {
                  style: 'display:none'
                })
-               .html('-10')
+               .html("-10")
                .appendTo($('.add-comment'))
                .fadeIn('1000', function() {
                  var el = $(this);
@@ -212,9 +212,6 @@ $('.fake-btn').on('click', function() {
          }
       }
     });
-
-
-
 
 
 

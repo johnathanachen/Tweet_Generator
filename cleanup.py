@@ -16,7 +16,8 @@ class Clean():
 
     def _single_words(self, long_string):
         """ Seperate string into word list """
-        word_list = long_string.split()
+        word_list = long_string.lower()
+        word_list = word_list.split()
         return word_list
 
     def clean_text(self, file_name):
@@ -25,4 +26,4 @@ class Clean():
         return word_list
 
 # file_name = "transcript.txt"
-# Clean(file_name)
+# Clean().clean_text(file_name)

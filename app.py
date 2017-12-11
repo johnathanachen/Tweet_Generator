@@ -2,17 +2,21 @@ from flask import Flask, render_template
 from random import randint
 from cleanup import Clean
 from markov import Markov
+# import nltk
+# nltk.download('punkt')
+# nltk.download('averaged_perceptron_tagger')
 import random
 
 app = Flask(__name__)
 
 file_name = "transcript.txt"
 data = Clean().clean_text(file_name)
+# tokens = nltk.word_tokenize(file_name)
+# tagged = nltk.pos_tag(tokens)
 
 @app.route('/', methods=['GET', 'POST'])
 def hello():
     sentence = Markov().main(data, 10)
-    guess_token = False
     count = read_current_count()
     new_count = write_new_count()
     score = read_score()
@@ -123,8 +127,8 @@ def pick_text():
         write_new_guess("True")
         return results
     else:
-        f = open("corpus.txt", "r")
-        corpus = f.read()
+        # f = open("transcript.txt", "r")
+        # data = f.read()
         sentence = Markov().main(data, 10)
         write_new_guess("False")
         return sentence
