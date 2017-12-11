@@ -82,7 +82,8 @@ $('.middle-btn').on('click', function() {
         $(".new-count").html(response);
       }
     });
-
+document.getElementById("button").disabled = false;
+document.getElementById("button2").disabled = false;
 });
 
 function read_score(countText) {
@@ -163,7 +164,8 @@ $('.real-btn').on('click', function() {
          }
       }
     });
-
+document.getElementById("button").disabled = true;
+document.getElementById("button2").disabled = true;
 });
 
 
@@ -212,7 +214,8 @@ $('.fake-btn').on('click', function() {
          }
       }
     });
-
+document.getElementById("button").disabled = true;
+document.getElementById("button2").disabled = true;
 
 
 
