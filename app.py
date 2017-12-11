@@ -19,6 +19,7 @@ def hello():
     sentence = Markov().main(data, 10)
     count = read_current_count()
     new_count = write_new_count()
+    reset = reset_score()
     score = read_score()
     return render_template("index.html", sentence=sentence, count=count, score=score)
 
@@ -86,6 +87,19 @@ def read_score():
     f = open("current_score.txt", "r")
     score = f.read()
     return score
+
+def reset_score():
+    '''
+    Add more score to file
+    '''
+    f = open("current_score.txt", "r")
+    score = f.read()
+    new_count = 0
+    string_format = str(new_count)
+    f = open("current_score.txt", "w")
+    f.write(string_format)
+    new_score = read_score()
+    return new_score
 
 ######################################################
 # Check if guess is right or wrong
