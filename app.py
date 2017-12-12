@@ -1,13 +1,11 @@
 from flask import Flask, render_template
 from random import randint
-# from scripts.cleanup import Clean
 from scripts.markov import MarkovChain
 import random
 
 app = Flask(__name__)
 
 file_name = "cleaned_corpus.txt"
-# data = Clean().clean_text(file_name)
 
 @app.route('/', methods=['GET', 'POST'])
 def hello():
