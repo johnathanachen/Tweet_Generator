@@ -1,7 +1,7 @@
 from flask import Flask, render_template
 from random import randint
 # from scripts.cleanup import Clean
-from scripts.markov import MarkovChain
+from markov import MarkovChain
 import random
 
 app = Flask(__name__)
