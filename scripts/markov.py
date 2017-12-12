@@ -194,7 +194,7 @@ class FileParser:
         :param file_name:       The name of the file we want to parse
         """
 
-        file_reader = open(file_name, "r", encoding="utf8")
+        file_reader = open(file_name, "rb")
 
         self.words = []
         self.lines = file_reader.read().splitlines()
