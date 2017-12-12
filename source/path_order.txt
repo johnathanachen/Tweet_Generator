@@ -1,1 +1,0 @@
-donald_scrape -> markov_model

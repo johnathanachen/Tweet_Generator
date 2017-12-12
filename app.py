@@ -1,7 +1,7 @@
 from flask import Flask, render_template
 from random import randint
-from cleanup import Clean
-from markov import Markov
+from scripts.cleanup import Clean
+from scripts.markov import Markov
 # import nltk
 # nltk.download('punkt')
 # nltk.download('averaged_perceptron_tagger')
@@ -9,7 +9,7 @@ import random
 
 app = Flask(__name__)
 
-file_name = "transcript.txt"
+file_name = "cleaned_corpus.txt"
 data = Clean().clean_text(file_name)
 # tokens = nltk.word_tokenize(file_name)
 # tagged = nltk.pos_tag(tokens)
@@ -31,7 +31,7 @@ def read_current_count():
     '''
     Read increased count from file
     '''
-    text_file = open("counter.txt", "r")
+    text_file = open("data/counter.txt", "r")
     count = text_file.read()
     return count
 
@@ -39,11 +39,11 @@ def write_new_count():
     '''
     Write increased count to file
     '''
-    f = open("counter.txt", "r")
+    f = open("data/counter.txt", "r")
     data = f.read()
     new_count = int(data) + 1
     string_format = str(new_count)
-    f = open("counter.txt", "w")
+    f = open("data/counter.txt", "w")
     f.write(string_format)
 
 
@@ -56,11 +56,11 @@ def add_to_score():
     '''
     Add more score to file
     '''
-    f = open("current_score.txt", "r")
+    f = open("data/current_score.txt", "r")
     score = f.read()
     new_count = int(score) + 10
     string_format = str(new_count)
-    f = open("current_score.txt", "w")
+    f = open("data/current_score.txt", "w")
     f.write(string_format)
     new_score = read_score()
     return new_score
@@ -70,11 +70,11 @@ def subtract_score():
     '''
     Add more score to file
     '''
-    f = open("current_score.txt", "r")
+    f = open("data/current_score.txt", "r")
     score = f.read()
     new_count = int(score) - 10
     string_format = str(new_count)
-    f = open("current_score.txt", "w")
+    f = open("data/current_score.txt", "w")
     f.write(string_format)
     new_score = read_score()
     return new_score
@@ -84,7 +84,7 @@ def read_score():
     '''
     Read score from file
     '''
-    f = open("current_score.txt", "r")
+    f = open("data/current_score.txt", "r")
     score = f.read()
     return score
 
@@ -92,11 +92,11 @@ def reset_score():
     '''
     Add more score to file
     '''
-    f = open("current_score.txt", "r")
+    f = open("data/current_score.txt", "r")
     score = f.read()
     new_count = 0
     string_format = str(new_count)
-    f = open("current_score.txt", "w")
+    f = open("data/current_score.txt", "w")
     f.write(string_format)
     new_score = read_score()
     return new_score
@@ -109,7 +109,7 @@ def read_current_guess():
     '''
     Read guess token from file
     '''
-    text_file = open("guess_token.txt", "r")
+    text_file = open("data/guess_token.txt", "r")
     guess_state = text_file.read()
     return guess_state
 
@@ -117,7 +117,7 @@ def write_new_guess(guess):
     '''
     Write new guess to file
     '''
-    f = open("guess_token.txt", "w")
+    f = open("data/guess_token.txt", "w")
     f.write(guess)
 
 ######################################################

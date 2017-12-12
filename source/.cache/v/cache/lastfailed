@@ -1,9 +1,0 @@
-{
-  "dictogram_test.py::DictogramTest::test_add_count": true, 
-  "dictogram_test.py::DictogramTest::test_contains": true, 
-  "dictogram_test.py::DictogramTest::test_entries": true, 
-  "dictogram_test.py::DictogramTest::test_tokens": true, 
-  "dictogram_test.py::DictogramTest::test_types": true, 
-  "listogram_test.py::ListogramTest::test_entries": true, 
-  "sample_test.py": true
-}
