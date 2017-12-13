@@ -4,7 +4,6 @@ from flask import Flask, render_template
 from random import randint
 from scripts.cleanup import Clean
 from scripts.markov import Markov
-import pickle
 import random
 
 app = Flask(__name__)
