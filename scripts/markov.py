@@ -75,7 +75,7 @@ class MarkovChain:
                 generated_sentence = word + generated_sentence
             else:
                 # try:
-                element = self.dictogram[self.max_order + 1].forwards[tuple(window)]
+                element = self.dictogram[self.max_order].forwards[tuple(window)]
                 # except KeyError:
                 #     print ("Key does not exist!")
                 #     continue
