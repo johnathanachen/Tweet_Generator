@@ -1,9 +1,9 @@
 from scripts.dictogram import Dictogram
 from collections import deque
-
+import codecs
 
 class MarkovChain:
-    
+
     # Max amount of attempts we have to generate a new sentence
     MAX_ITERATION_ATTEMPTS = 100
 
@@ -199,7 +199,7 @@ class FileParser:
         :param file_name:       The name of the file we want to parse
         """
 
-        file_reader = open(file_name, "r", encoding="utf8")
+        file_reader = codecs.open(file_name, "r", encoding="utf8")
 
         self.words = []
         self.lines = file_reader.read().splitlines()
