@@ -24,7 +24,7 @@ class MarkovChain:
             print("END: " + str(order))
 
 
-    def generate_sentence(self, backward=False, min_length=50, max_length=140):
+    def generate_sentence(self, backward=False, min_length=50, max_length=200):
         """ Generates a sentence by first getting a sentence start then getting a random token following that word. We
         then end the sentence once we get to an end token ([NONE]). If the sentence is too small or too long we try
         generating a sentence gain.
