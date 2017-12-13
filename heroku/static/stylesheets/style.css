@@ -1,0 +1,384 @@
+html, body {
+  margin: 0;
+  padding: 0;
+  width: 100%;
+  max-width: 100%;
+  overflow-x: hidden;
+}
+
+body {
+  font-family: Sans-Serif;
+  background: #F5F8FA;
+}
+
+.title {
+    display: flex;
+    justify-content: center;
+}
+
+.title>img {
+    width: auto;
+    height: 300px;
+    margin-top: 40px;
+    margin-bottom: -40px;
+}
+
+.tweet {
+  margin: 10vh auto;
+  border: 1px solid #eee;
+  padding: 25px 50px;
+  border-radius: 5px;
+  max-width: 500px;
+  background: white;
+  margin-bottom: 0px;
+}
+.tweet .follow {
+  display: block;
+  background-color: #f5f8fa;
+  background-image: -webkit-linear-gradient(#fff, #f5f8fa);
+  background-image: linear-gradient(#fff, #f5f8fa);
+  border: 1px #e1e8ed solid;
+  border-radius: 5px;
+  color: black;
+  padding: 5px;
+  margin-top: 9px;
+  float: right;
+  text-align: center;
+  text-decoration: none;
+}
+.tweet .follow:hover {
+  background-color: #e1e8ed;
+  background-image: -webkit-linear-gradient(#fff, #e1e8ed);
+  background-image: linear-gradient(#fff, #e1e8ed);
+}
+.tweet .follow:after {
+  content: "";
+  display: block;
+  clear: both;
+}
+.tweet .follow i {
+  color: #55acee;
+  padding-right: 5px;
+}
+.tweet--user:after {
+  content: "";
+  display: block;
+  clear: both;
+}
+.tweet--user-avatar {
+  border-radius: 25px;
+  float: left;
+  margin-right: 10px;
+  width: 50px;
+  height: 50px;
+}
+.tweet--user-name {
+  font-weight: bold;
+  padding-top: 9px;
+}
+.tweet--user-name span {
+  font-weight: normal;
+  color: #999;
+  font-size: 0.8em;
+  display: block;
+}
+.tweet--body {
+  margin: 20px 0 5px;
+  font-size: 1.5em;
+}
+.tweet--time {
+  font-weight: normal;
+  color: #999;
+  font-size: 0.8em;
+}
+.tweet--actions {
+  margin-top: 20px;
+  border-top: 1px solid #eee;
+  padding-top: 10px;
+}
+.tweet--actions [class*="fa-"] {
+  float: right;
+  margin-left: 20px;
+  color: #999;
+}
+.tweet--actions [class*="fa-"].fa-heart:hover {
+  color: #DD2E44;
+}
+.tweet--actions [class*="fa-"]:hover {
+  color: #4A913C;
+  cursor: pointer;
+}
+.tweet--actions [class*="fa-"]:after {
+  content: "";
+  display: block;
+  clear: both;
+}
+.tweet--actions span {
+  color: #999;
+  font-size: 0.8em;
+  text-transform: uppercase;
+}
+.new-tweet {
+    display: flex;
+    justify-content: space-between;
+}
+
+/*===========================================*/
+/* BUTTONS
+/*===========================================*/
+
+.button {
+  height: 50px;
+  min-width: 100px;
+  background: #348AA7;
+  border: none;
+  outline: none;
+  color: white;
+  font-family: inherit;
+  font-weight: 400;
+  font-size: 20px;
+  border-radius: 4px;
+  border-bottom: 2px solid #30809b;
+}
+
+.button__wrapper {
+    display: flex;
+    flex-direction: row;
+    justify-content: space-between;
+    max-width: 600px;
+    margin-left: auto;
+    margin-right: auto;
+}
+
+button {
+    border-radius: 0px;
+    border: none;
+    transition: all 0.2s;
+}
+
+.new-tweet-btn {
+    margin-top: 23px;
+    background-color: #499FE7;
+    font-family: "Helvetica Neue";
+    font-weight: bold;
+    font-size: 12px;
+    color: white;
+    padding: 10px 15px;
+    width: 127px;
+    height: 60px !important;
+}
+
+.verified {
+    margin-bottom: -2px;
+    height: 13px;
+    width: 13px;
+}
+
+.real-btn {
+    background-color: #2DA032;
+    /*box-shadow: 0px 15px 0px 0px #28782C, 0px 0px 20px 0px #bbb;*/
+    border-bottom: 7px solid #28782C;
+    /*-webkit-box-shadow: inset 0 0 0 4px #0D7511;
+            box-shadow: inset 0 0 0 4px #0D7511;
+    color: #ffffff;
+    -webkit-transition: color 0.25s 0.08333s;
+    transition: color 0.25s 0.08333s;
+    position: relative;*/
+}
+.real-btn:hover {
+  /*box-shadow: 0 7px 1px #28782C;*/
+  border-bottom: 7px solid #28782C;
+  box-shadow: 0 7px 1px #3683C2;
+  transition: all 0.1s ease-in;
+}
+
+.real-btn:active {
+  transform: translateY(4px);
+  border-bottom-width: 2px;
+  box-shadow: none;
+}
+.fake-btn {
+    background-color: #F54554;
+    border-bottom: 7px solid #f02046;
+    /*-webkit-box-shadow: inset 0 0 0 4px #FC0D1C;
+            box-shadow: inset 0 0 0 4px #FC0D1C;
+    color: #ffffff;
+    -webkit-transition: color 0.25s 0.08333s;
+    transition: color 0.25s 0.08333s;
+    position: relative;*/
+}
+.fake-btn:hover {
+  border-bottom: 7px solid #f02046;
+  box-shadow: 0 7px 1px #3683C2;
+  transition: all 0.1s ease-in;
+}
+
+.fake-btn:active {
+  transform: translateY(4px);
+  border-bottom-width: 2px;
+}
+
+.middle-btn {
+    background-color: #4DA0E5;
+    border-bottom: 7px solid #3683C2;
+    /*-webkit-box-shadow: inset 0 0 0 4px #4DA0E5;
+            box-shadow: inset 0 0 0 4px #4DA0E5;
+    color: #ffffff;
+    -webkit-transition: color 0.25s 0.08333s;
+    transition: color 0.25s 0.08333s;
+    position: relative;*/
+}
+.middle-btn:hover {
+  box-shadow: 0 4px 1px #3683C2;
+  border-bottom: 7px solid #3683C2;
+  transition: all 0.1s ease-in;
+}
+
+.middle-btn:active {
+  transform: translateY(4px);
+  border-bottom-width: 2px;
+  box-shadow: none;
+}
+
+/*.draw-border::before, .draw-border::after {
+  border: 0 solid transparent;
+  -webkit-box-sizing: border-box;
+          box-sizing: border-box;
+  content: '';
+  pointer-events: none;
+  position: absolute;
+  width: 0;
+  height: 0;
+  bottom: 0;
+  right: 0;
+}
+
+.draw-border::before {
+  border-bottom-width: 4px;
+  border-left-width: 4px;
+}
+
+.draw-border::after {
+  border-top-width: 4px;
+  border-right-width: 4px;
+}
+
+.draw-border:hover {
+  color: #ffffff;
+}
+
+.draw-border:hover::before, .draw-border:hover::after {
+  border-color: #ffffff;
+  -webkit-transition: border-color 0s, width 0.25s, height 0.25s;
+  transition: border-color 0s, width 0.25s, height 0.25s;
+  width: 100%;
+  height: 100%;
+}
+
+.draw-border:hover::before {
+  -webkit-transition-delay: 0s, 0s, 0.25s;
+          transition-delay: 0s, 0s, 0.25s;
+}
+
+.draw-border:hover::after {
+  -webkit-transition-delay: 0s, 0.25s, 0s;
+          transition-delay: 0s, 0.25s, 0s;
+}
+
+.btn {
+  background: none;
+  border: none;
+  cursor: pointer;
+  line-height: 1.5;
+  font: 700 1.2rem 'Roboto Slab', sans-serif;
+  padding: 1em 2em;
+  letter-spacing: 0.05rem;
+}
+
+.btn:focus {
+  outline: 2px dotted #55d7dc;
+}*/
+
+/* ==========================================================
+
+Add Score
+
+============================================================= */
+
+.score__wrapper {
+    margin-left: 50px;
+    margin-top: 170px;
+    display: flex;
+    flex-direction: column;
+}
+
+.text {
+    font-size: 90px;
+
+}
+
+.add-comment {
+  position: relative;
+  width: 50px;
+  height: 50px;
+  display: inline-block;
+  font-size: 50px;
+  margin-left: 20px;
+  vertical-align: middle;
+}
+
+.plus-one {
+  color: #53D869;
+  position: absolute;
+  left: 50%;
+  -webkit-transform: translate(-50%, -50%);
+          transform: translate(-50%, -50%);
+  -webkit-animation-name: fade-in-up;
+          animation-name: fade-in-up;
+  -webkit-animation-duration: 3s;
+          animation-duration: 3s;
+  -webkit-animation-iteration-count: 1;
+          animation-iteration-count: 1;
+  -webkit-animation-timing-function: ease;
+          animation-timing-function: ease;
+}
+
+.minus-one {
+  color: #FC3D39;
+  position: absolute;
+  left: 50%;
+  -webkit-transform: translate(-50%, -50%);
+          transform: translate(-50%, -50%);
+  -webkit-animation-name: fade-in-up;
+          animation-name: fade-in-up;
+  -webkit-animation-duration: 3s;
+          animation-duration: 3s;
+  -webkit-animation-iteration-count: 1;
+          animation-iteration-count: 1;
+  -webkit-animation-timing-function: ease;
+          animation-timing-function: ease;
+}
+
+@-webkit-keyframes fade-in-up {
+  0%,
+  10% {
+    top: 50%;
+    opacity: 1;
+  }
+  100% {
+    top: -100%;
+    opacity: 0;
+  }
+}
+
+@keyframes fade-in-up {
+  0%,
+  10% {
+    top: 50%;
+    opacity: 1;
+  }
+  100% {
+    top: -100%;
+    opacity: 0;
+  }
+}
