@@ -77,7 +77,7 @@ class MarkovChain:
                 try:
                     element = self.dictogram[self.max_order - 1].forwards[tuple(window)]
                 except KeyError:
-                    element = self.dictogram[self.max_order - 1].backwards[tuple(window)]
+                    print ("Key does not exist!")
                     continue
 
                 word = " " + current_word
