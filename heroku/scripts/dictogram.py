@@ -1,6 +1,6 @@
 import random
 
-from histogram import Histogram
+from scripts.histogram import Histogram
 from collections import deque
 
 

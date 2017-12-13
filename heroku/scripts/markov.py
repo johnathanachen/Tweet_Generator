@@ -1,4 +1,4 @@
-from histograms import Dictogram
+from scripts.histograms import Dictogram
 import random
 from collections import deque
 import re
