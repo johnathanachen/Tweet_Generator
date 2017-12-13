@@ -1,4 +1,5 @@
 import random
+import pickle
 
 from scripts.histogram import Histogram
 from collections import deque
@@ -7,220 +8,140 @@ from collections import deque
 class Dictogram:
 
     def __init__(self, words, order):
-        """ Constructing the Dictogram
-
-        :param words:       The words you want to add (the corpus)
-        :param order:       The Markov Chain order
-        """
+        self.order = order
 
         self.forwards = dict()
         self.backwards = dict()
-        self.word_count = len(words)
 
-        self.data = []
-        self.sentence_starts = []
+        forwards_state = deque(words[0: order])
+        backwards_state = deque(list(reversed(words[1: 1 + order])))
+
+        self.sentence_starts = [tuple(forwards_state)]
         self.sentence_ends = []
 
-        self.construct_data(self.forwards, order, words, False)
-        self.construct_data(self.backwards, order, list(reversed(words)), True)
-        # self.construct_us(words, order)
+        for i in range(order, len(words)):
+            self.add_forward_word(i, forwards_state, words)
+            self.add_backward_word(i, backwards_state, words)
 
-    def construct_us(self, words, order):
-        orders = []
-        windows = []
-        indexes = []
+        # Don't forget to set our last state to a split
+        self.add(self.forwards, tuple(forwards_state), '[SPLIT]')
 
-        reversed_words = list(reversed(words))
+        if len(backwards_state) == self.order:
+            self.sentence_ends.append(tuple(backwards_state))
+            self.add(self.backwards, tuple(backwards_state), words[len(words) - self.order])
 
-        # Go through all orders and construct their information
-        for i in range(1, order + 1):
-            orders.append([dict(), dict()])
+        self.add(self.backwards, tuple(reversed(words[0:self.order])), '[SPLIT]')
 
-            forward_window = deque(words[0: i])
-            backward_window = deque(words[1: i + 1])
+    def add_forward_word(self, i, forwards_state, words):
+        if len(forwards_state) < self.order:
+            forwards_state.append(words[i])
 
-            windows.append([forward_window, backward_window])
-            indexes.append(i)
+            if len(forwards_state) == self.order:
+                self.sentence_starts.append(tuple(forwards_state))
 
-        # Add first word to starting states
-        self.sentence_starts.append(words[0])
+            return
 
-        word_length = len(words)
-        while len(words):
-            indexes_length = len(indexes)
+        next_word = words[i]
 
-            for i in range(indexes_length):
-                index = indexes[i]
+        if next_word[-1] == '.':
+            next_word = next_word[:-1]
 
-                next_word = words[index]
-                backward_word = words[index - order]
-                order_windows = windows[i]
+        self.add(self.forwards, tuple(forwards_state), next_word)
 
-                if len(order_windows[0]) < i + 1:
-                    order_windows[0].append(next_word)
-                    order_windows[1].append(backward_word)
-                    continue
+        forwards_state.popleft()
+        forwards_state.append(next_word)
 
-                # If we are in first order and the next word is the end of a sentence list
-                if next_word[-1] == '.':
-                    next_word = next_word[:-1]
+        # If the next word was a sentence end we set the last state equal to a split and clear our window
+        if words[i][-1] == '.':
+            self.add(self.forwards, tuple(forwards_state), '[SPLIT]')
+            forwards_state.clear()
 
-                    if i == 1:
-                        # Add the next word to sentence ends
-                        self.sentence_ends.append(next_word)
+    def add_backward_word(self, i, state, words):
+        if i + 2 > len(words):
+            return
 
-                        # If we are not at the end of our word list, add our word to start of sentence list
-                        if index + 1 < word_length:
-                            self.sentence_starts.append(words[index + 1])
+        if len(state) < self.order:
+            if words[i - self.order - 1][-1] != '.':
+                return
 
-                # Add for forward chain
-                self.add(orders[i][0], tuple(order_windows[0]), next_word)
-                self.add(orders[i][1], tuple(order_windows[1]), backward_word)
+            for j in range(i - self.order + 1, i + 1):
+                state_word = words[j]
 
-                if words[index][-1] == '.':
-                    windows[i][0].append(next_word)
-                    windows[i][0].popleft()
-                    windows[i][1].append(next_word)
-                    windows[i][1].popleft()
+                if state_word[-1] == '.':
+                    if len(state) != self.order - 1:
+                        state.clear()
+                        return
 
-                    self.add(orders[i][0], tuple(order_windows[0]), '[SPLIT]')
-                    self.add(orders[i][1], tuple(order_windows[1]), '[SPLIT]')
+                    state_word = state_word[:-1]
 
-                    order_windows[0].clear()
-                    order_windows[1].clear()
-                    continue
+                state.insert(0, state_word)
 
-                windows[i][0].append(next_word)
-                windows[i][0].popleft()
-                windows[i][1].append(next_word)
-                windows[i][1].popleft()
+            end = []
+            for j in range(i - self.order * 2, i - self.order):
+                word = words[j]
 
-            # Increment all indexes and if it hits the end we add it to our data
-            for i in range(indexes_length):
-                indexes[i] += 1
+                if word[-1] == '.':
+                    word = word[:-1]
 
-                if indexes[i] == word_length:
-                    self.data.insert(0, orders[i])
-                    del indexes[i]
+                end.append(word)
 
-            if 1 > indexes_length:
-                break
+            to_be_split = []
+            for j in range(i - self.order, i):
+                split_word = words[j]
 
-    def construct_data(self, data, order, words, backward):
-        creating = False
+                if split_word[-1] == '.':
+                    split_word = split_word[:-1]
 
-        words_length = len(words)
-        window = deque(words[0: order])
+                to_be_split.insert(0, split_word)
 
-        if backward and window[0][-1] == '.':
-            window[0] = window[0][:-1]
+            if len(state) < self.order:
+                return
 
-        # Used to find the start of sentences
-        if backward:
-            self.sentence_ends.append(tuple(window))
-        else:
-            self.sentence_starts.append(tuple(window))
+            self.add(self.backwards, tuple(to_be_split), '[SPLIT]')
+            self.sentence_ends.append(tuple(reversed(end)))
 
-        # We loop through all our words and if it has occurred we add the following word to a histogram. If it has not
-        # occurred we construct a new histogram
-        for i in range(order, words_length):
-            current_word = words[i]
+        last_word = words[i - self.order]
 
-            if len(window) < order:
-                window.append(current_word)
-                continue
+        self.add(self.backwards, tuple(state), last_word)
 
-            if creating:
-                if backward:
-                    self.sentence_ends.append(tuple(window))
-                else:
-                    self.sentence_starts.append(tuple(window))
+        next_word = words[i + 1]
+        if next_word[-1] == '.':
+            next_word = next_word[:-1]
 
-                creating = False
+        state.pop()
+        state.appendleft(next_word)
 
-            if self.next_item(data, backward, window, current_word):
-                creating = True
-                window.clear()
+        if words[i][-1] == '.':
+            state.clear()
 
-                if backward:
-                    window.appendleft(current_word[:-1])
+    @staticmethod
+    def add(data, state, next_word):
+        if state not in data:
+            data[state] = Histogram()
 
-    def next_item(self, data, backward, window, word):
-        split = False
+        data[state].update_word(next_word)
 
-        if word[-1] == '.':
-            if backward:
-                self.next_item(data, backward, window, '[SPLIT]')
+    def generate_sentence(self):
+        current_state = deque(self.random_start())
+        final_sentence = ''
 
-                return True
-            else:
-                word = word[:-1]
-                split = True
+        while current_state[-1] != '[SPLIT]':
+            final_sentence += ' ' + current_state[0]
 
-        # Add current data to our Dictogram
-        self.add(data, tuple(window), word)
+            states_histogram = self.forwards[tuple(current_state)]
+            next_word = states_histogram.random_word()
 
-        # Add the next number in the sequence
-        window.append(word)
+            current_state.popleft()
+            current_state.append(next_word)
 
-        if backward:
-            window.popleft()
-        else:
-            if window.popleft() == '[SPLIT]':
-                data.append(tuple(window))
+        # We have to add the last state to the sentence
+        return final_sentence[1:] + ' ' + ' '.join(tuple(current_state)[:-1]) + '.'
 
-        # End of Word
-        if split:
-            self.next_item(data, backward, window, '[SPLIT]')
+    def random_start(self):
+        return self.sentence_starts[random.randint(0, len(self.sentence_starts) - 1)]
 
-            return True
-
-    def random_start(self, backwards=False):
-        """ Finds a random start to our sentence using the end keys list.
-
-        :return:        A key to use in order to construct the start of a sentence
-        """
-        if backwards:
-            return self.sentence_ends[random.randint(0, len(self.sentence_ends) - 1)]
-        else:
-            return self.sentence_starts[random.randint(0, len(self.sentence_starts) - 1)]
-
-    def add(self, data, key, value):
-        """ Adds a key-value pair to the data set.
-
-         :param key:        The word or phrase that we are currently looking at
-         :param value:      The value is the word or phrase following the key
-         """
-
-        # If the word or phrase has not been said before, we create a new histogram for that word.
-        if key not in data:
-            data[key] = Histogram()
-
-        # Update the word phrase in the keys histogram
-        data[key].update_word(value)
-
-    def random_forward_key(self):
-        """ Gets a random word or phrase from our data set """
-        keys = list(self.forwards.keys())
-
-        return keys[random.randint(0, len(keys) - 1)]
-
-    def random_backward_key(self):
-        """ Gets a random word or phrase from our data set """
-        keys = list(self.backwards.keys())
-
-        return keys[random.randint(0, len(keys) - 1)]
+    def random_end(self):
+        return self.sentence_ends[random.randint(0, len(self.sentence_ends) - 1)]
 
     def __str__(self):
-        to_return = ''
-
-        for i in range(len(self.data)):
-            to_return += str(i) + ' ORDER: \nForward:' + str(self.data[i][0]) + '\nBackward:' + str(self.data[i][0]) + '\n'
-
-        return to_return
-
-
-if __name__ == "__main__":
-    with open('data.pickle', 'rb') as handle:
-        test_dict = pickle.load(handle)
-        print(test_dict.random_forward_key())
+        return str(self.forwards) + ' \n ' + str(self.backwards)
