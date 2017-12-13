@@ -39,7 +39,6 @@ class MarkovChain:
             generated_sentence = ' '.join(list(reversed(window)))
         else:
             window = deque(self.dictogram[self.max_order - 1].random_start(False))
-            if window is not None:
                 element = self.dictogram[self.max_order - 1].forwards[tuple(window)]
                 generated_sentence = ' '.join(window)
 
@@ -74,13 +73,13 @@ class MarkovChain:
                 # Add current word to our new sentence
                 generated_sentence = word + generated_sentence
             else:
-
                 element = self.dictogram[self.max_order - 1].forwards[tuple(window)]
                 print(element)
+                if element is not None:
 
-                word = " " + current_word
+                    word = " " + current_word
 
-                generated_sentence += word
+                    generated_sentence += word
 
         sentence_length = len(generated_sentence)
 
