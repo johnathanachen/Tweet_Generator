@@ -1,5 +1,4 @@
 import random
-import pickle
 
 from scripts.histogram import Histogram
 from collections import deque
