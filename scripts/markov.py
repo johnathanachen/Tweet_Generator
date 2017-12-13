@@ -97,7 +97,7 @@ class MarkovChain:
         # Return our sentence and capitalize it. Also make sure there are no uncalled for None tokens
         return generated_sentence
 
-    def generate_with_seed(self, raw_seed, min_length=50, max_length=140, depth=0):
+    def generate_with_seed(self, raw_seed, min_length=50, max_length=200, depth=0):
         seed = list(raw_seed.split())
 
         while len(seed) < self.max_order:
