@@ -12,7 +12,10 @@ file_name = "cleaned_corpus.txt"
 @app.route('/', methods=['GET', 'POST'])
 def hello():
     model = MarkovChain(file_name, 2)
-    sentence = model.generate_sentence()
+    try:
+        sentence = model.generate_sentence()
+    except TypeError:
+        sentence = model.generate_sentence()
     count = read_current_count()
     new_count = write_new_count()
     reset = reset_score()
@@ -140,7 +143,10 @@ def pick_text():
         # f = open("transcript.txt", "r")
         # data = f.read()
         model = MarkovChain(file_name, 2)
-        sentence = model.generate_sentence()
+        try:
+            sentence = model.generate_sentence()
+        except TypeError:
+            sentence = model.generate_sentence()
         write_new_guess("False")
         return sentence
 
