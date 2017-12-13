@@ -17,8 +17,8 @@ This is a random tweet generator that generates short tweets using the Markov ch
 Installation is super friendly using `pip`
 
 ```
-$ pip install
-$ python app.py
+$ pip install -r requirements.txt
+$ python3 app.py
 ```
 
 ### Deployment
