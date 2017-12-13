@@ -8,10 +8,12 @@ import random
 app = Flask(__name__)
 
 file_name = "cleaned_corpus.txt"
+model = None
 
 @app.route('/', methods=['GET', 'POST'])
 def hello():
     model = MarkovChain(file_name, 2)
+    sentence = None
     try:
         sentence = model.generate_sentence()
     except TypeError:
@@ -143,6 +145,7 @@ def pick_text():
         # f = open("transcript.txt", "r")
         # data = f.read()
         model = MarkovChain(file_name, 2)
+        sentence = None
         try:
             sentence = model.generate_sentence()
         except TypeError:
