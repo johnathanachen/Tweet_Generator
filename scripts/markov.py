@@ -39,8 +39,9 @@ class MarkovChain:
             generated_sentence = ' '.join(list(reversed(window)))
         else:
             window = deque(self.dictogram[self.max_order - 1].random_start(False))
-            element = self.dictogram[self.max_order - 1].forwards[tuple(window)]
-            generated_sentence = ' '.join(window)
+            if window is not None:
+                element = self.dictogram[self.max_order - 1].forwards[tuple(window)]
+                generated_sentence = ' '.join(window)
 
         # If the window has a split
         if '[SPLIT]' in generated_sentence:
