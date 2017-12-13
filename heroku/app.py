@@ -2,7 +2,8 @@ import os
 
 from flask import Flask, render_template
 from random import randint
-from scripts.markov import MarkovChain
+from scripts.cleanup import Clean
+from scripts.markov import Markov
 import pickle
 import random
 
