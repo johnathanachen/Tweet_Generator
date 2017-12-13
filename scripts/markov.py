@@ -9,7 +9,6 @@ class MarkovChain:
 
     def __init__(self, corpus, max_order):
         """ Constructing the Markov Model
-
         :param corpus:      The file location of the corpus we want to use
         :param order:       The order for the Markov Chain
         """
@@ -19,13 +18,15 @@ class MarkovChain:
         self.max_order = max_order
 
         for order in range(1, max_order + 1):
+            print("START: " + str(order))
             self.dictogram.append(Dictogram(self.parser.words, order))
+            print("END: " + str(order))
+
 
     def generate_sentence(self, backward=False, min_length=50, max_length=140):
         """ Generates a sentence by first getting a sentence start then getting a random token following that word. We
         then end the sentence once we get to an end token ([NONE]). If the sentence is too small or too long we try
         generating a sentence gain.
-
         :return:    Our uniquely generated sentence
         """
 
@@ -33,15 +34,11 @@ class MarkovChain:
         generated_sentence = ''
 
         if backward:
-            window = deque(self.dictogram[self.max_order - 1].random_end())
-
-            if tuple(window) not in self.dictogram[self.max_order - 1].backwards:
-                return self.generate_with_seed(backward)
-
+            window = deque(self.dictogram[self.max_order - 1].random_start(True))
             element = self.dictogram[self.max_order - 1].backwards[tuple(window)]
             generated_sentence = ' '.join(list(reversed(window)))
         else:
-            window = deque(self.dictogram[self.max_order - 1].random_start())
+            window = deque(self.dictogram[self.max_order - 1].random_start(False))
             element = self.dictogram[self.max_order - 1].forwards[tuple(window)]
             generated_sentence = ' '.join(window)
 
@@ -141,7 +138,6 @@ class MarkovChain:
             # If our sentence is too short or long we return a new sentence
             if forward_length > max_length / 2 or forward_length < min_length / 2:
                 if depth > self.MAX_ITERATION_ATTEMPTS:
-                    print(forward_sentence)
                     return None
 
                 return self.generate_with_seed(raw_seed, depth=depth + 1)
@@ -153,7 +149,6 @@ class MarkovChain:
             # If the window has a split
             if '[SPLIT]' in backward_sentence:
                 if depth > self.MAX_ITERATION_ATTEMPTS:
-                    print("ERE2")
                     return None
 
                 return self.generate_with_seed(raw_seed, depth=depth + 1)
@@ -181,12 +176,12 @@ class MarkovChain:
             # If our sentence is too short or long we return a new sentence
             if backward_length > max_length / 2 or backward_length < min_length / 2:
                 if depth > self.MAX_ITERATION_ATTEMPTS:
-                    print(backward_length)
                     return None
 
                 return self.generate_with_seed(raw_seed, depth=depth + 1)
 
             return backward_sentence + forward_sentence
+
 
 
 class FileParser:
@@ -199,7 +194,7 @@ class FileParser:
         :param file_name:       The name of the file we want to parse
         """
 
-        file_reader = codecs.open(file_name, "r", "utf8")
+        file_reader = open(file_name, "r", encoding="utf8")
 
         self.words = []
         self.lines = file_reader.read().splitlines()
