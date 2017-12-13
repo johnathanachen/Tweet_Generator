@@ -1,6 +1,5 @@
 from scripts.dictogram import Dictogram
 from collections import deque
-import codecs
 
 
 class MarkovChain:
@@ -24,7 +23,7 @@ class MarkovChain:
             print("END: " + str(order))
 
 
-    def generate_sentence(self, backward=False, min_length=50, max_length=200):
+    def generate_sentence(self, backward=False, min_length=50, max_length=140):
         """ Generates a sentence by first getting a sentence start then getting a random token following that word. We
         then end the sentence once we get to an end token ([NONE]). If the sentence is too small or too long we try
         generating a sentence gain.
@@ -74,12 +73,7 @@ class MarkovChain:
                 # Add current word to our new sentence
                 generated_sentence = word + generated_sentence
             else:
-                # try:
-                # This line doesn't work on heroku
                 element = self.dictogram[self.max_order - 1].forwards[tuple(window)]
-                # except KeyError:
-                #     print ("Key does not exist!")
-                #     continue
 
                 word = " " + current_word
 
@@ -98,7 +92,7 @@ class MarkovChain:
         # Return our sentence and capitalize it. Also make sure there are no uncalled for None tokens
         return generated_sentence
 
-    def generate_with_seed(self, raw_seed, min_length=50, max_length=200, depth=0):
+    def generate_with_seed(self, raw_seed, min_length=50, max_length=140, depth=0):
         seed = list(raw_seed.split())
 
         while len(seed) < self.max_order:
@@ -200,7 +194,7 @@ class FileParser:
         :param file_name:       The name of the file we want to parse
         """
 
-        file_reader = codecs.open(file_name, "r", "utf8")
+        file_reader = open(file_name, "r", encoding="utf8")
 
         self.words = []
         self.lines = file_reader.read().splitlines()
