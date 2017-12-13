@@ -156,6 +156,7 @@ def correct_guess():
 def new_count():
     count = read_current_count()
     new_count = write_new_count()
+    score = read_score()
     return count + " retweets"
 
 
