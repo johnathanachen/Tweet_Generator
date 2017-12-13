@@ -73,7 +73,9 @@ class MarkovChain:
                 # Add current word to our new sentence
                 generated_sentence = word + generated_sentence
             else:
+
                 element = self.dictogram[self.max_order - 1].forwards[tuple(window)]
+                print(element)
 
                 word = " " + current_word
 
