@@ -1,59 +1,74 @@
-from scripts.histograms import Dictogram
-import random
-from collections import deque
-import re
-#yeah
-class Markov():
+from __future__ import division, print_function  # Python 2 and 3 compatibility
+from nltk.tokenize import sent_tokenize
+from scripts.dictogram import *
 
-    def __init__(self):
-        pass
+class Markov(dict):
+    """Markov is a dictionary of key(current word), val/next_word(dictogram). Takes a string of text"""
+    def __init__(self, text=None):
+        #Create start and stop dictogram to store the begging of words and end of words
+        self['START'] = Dictogram()
+        if text:
+            #Creating a markov model for each sentence
+            self.markov(text, 1)
+    def tokenize_sentence(self, text):
+        """ Using nltk split corpus based on sentences"""
+        sentence_arr = sent_tokenize(text)
+        # print("There are {} sentences".format(len(sentence_arr)))
+        return sentence_arr
 
-    def _markov_chain(self, data):
-        """ Markov model """
-        #Dictionary that stores windows as the key in the key-value pair and then the value
-        #for each key is a dictogram
-        markov_chain = dict()
-        # Looping through the ammount of indexs in the list
-        for index in range(0, len(data) - 1):
-            # If index word of list exists in dictionary then update the current index
-            # Store a histogram of words for each window
-            if data[index] in markov_chain:
-                markov_chain[data[index]].update([data[index + 1]])
-            else:
-                markov_chain[data[index]] = Dictogram([data[index + 1]])
-        return markov_chain
 
-    # Walk our model
-    def _generate_random_start(self, model):
-        # Generate a "valid" starting word.
-        # A valid starting word are words that start a sentence
-        return random.choice(list(model.keys()))
 
-    # Generating sentence using first order markov_model
-    def _generate_sentence(self, length, markov_model):
-        # length parameter is length of the sentence
-        # Create first word
-        current_word = self._generate_random_start(markov_model)
-        # Save first word to sentence list
-        sentence = [current_word]
-        # Loop through the length of sentence provided
-        for i in range(0, length):
-            # Getting current dictogram and starting from the current word(first word)
-            current_dictogram = markov_model[current_word]
-            # Getting random word from dictogram starting from the place of the current word
-            random_word = current_dictogram.return_weighted_random_word()
-            # Setting current word variable to the random word
-            current_word = random_word
-            # Append the new current word until the sentence length is formed
-            sentence.append(current_word)
-        sentence[0] = sentence[0].capitalize()
-        sentence = ' '.join(sentence) + '.'
+    def markov(self,text, order=1):
+        """ Create a markoff model based on the text array input into the file """
+        corpus = self.tokenize_sentence(text)
+        # print(corpus)
+        x = 0
+        for sentence in corpus:
+            sentence = sentence.split()
+            x = 0
+            self['START'].add_count(sentence[0])
+            # From the first to the to last word
+            while x< len(sentence)-order:
+                word = " ".join(sentence[x:x+order])
+                next_word = sentence[order+x]
+                if word not in self.keys():
+                    self[word]= Dictogram()
+                self[word].add_count(next_word)
+                x+=1
+            # Adding a stop token to the final word
+            self[sentence[-1]] = Dictogram()
+            self[sentence[-1]].add_count('STOP')
+
+    def weight_markov(self):
+        """ Return a key with a value of possible next words weight """
+        markov_weight = {}
+        for key, val in self.items():
+            markov_weight[key] = weighted_hist(val)
+        return markov_weight
+
+    def generate_sentence(self, length=10):
+        """Return a sentence based on markov model"""
+        sentence = ""
+        weights = self.weight_markov()
+        #Get First word
+        word = stochastic_sampling(weights['START'])
+        sentence += word
+        words = 1
+        while words <= length:
+            word = stochastic_sampling(weights[word])
+            if word == 'STOP':
+                break
+            sentence += " "+word
+        print(sentence)
         return sentence
 
-    def main(self, data, length):
-        markov_chain = self._markov_chain(data)
-        sentence = self._generate_sentence(length, markov_chain)
-        return sentence
 
-# data = ["how", "much", "wood", "would", "a", "wood", "chuck", "chuck", "if", "a", "wood", "chuck", "could", "chuck", "wood"]
-# Markov(data, 10)
+
+def main():
+    file_name = open("cleaned_corpus.txt", "r")
+    read_file = file_name.read()
+    marky = Markov(read_file)
+    weighted_markov = marky.weight_markov()
+    sentence = marky.generate_sentence()
+
+main()
