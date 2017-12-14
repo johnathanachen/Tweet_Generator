@@ -127,7 +127,7 @@ def pick_text():
     '''
     Chooses to pick real or fake text before showing it to the user
     '''
-    random_number = randint(1,4)
+    random_number = randint(1,3)
     if random_number == 1:
         f = open("real_tweets.txt", "r")
         tweets = f.read()
