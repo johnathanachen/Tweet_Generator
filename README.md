@@ -13,7 +13,7 @@ This is a random tweet generator that generates short tweets using the Markov ch
 
 
 ## Installation
-mmmmmmm
+
 Installation is super friendly using `pip`
 
 ```

@@ -2,19 +2,20 @@ import os
 
 from flask import Flask, render_template
 from random import randint
-from scripts.markov import MarkovChain
-import pickle
+from scripts.cleanup import Clean
+from scripts.markov import Markov
 import random
 
 app = Flask(__name__)
 
-file_name = "cleaned_corpus.txt"
-model = None
+file_name = open("cleaned_corpus.txt", "r")
+read_file = file_name.read()
 
 @app.route('/', methods=['GET', 'POST'])
 def hello():
-    model = MarkovChain(file_name, 2)
-    sentence = model.generate_sentence()
+    marky = Markov(read_file)
+    weighted_markov = marky.weight_markov()
+    sentence = marky.generate_sentence()
     count = read_current_count()
     new_count = write_new_count()
     reset = reset_score()
@@ -141,8 +142,9 @@ def pick_text():
     else:
         # f = open("transcript.txt", "r")
         # data = f.read()
-        model = MarkovChain(file_name, 2)
-        sentence = model.generate_sentence()
+        marky = Markov(read_file)
+        weighted_markov = marky.weight_markov()
+        sentence = marky.generate_sentence()
         write_new_guess("False")
         return sentence
 
