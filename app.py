@@ -3,19 +3,17 @@ import os
 from flask import Flask, render_template
 from random import randint
 from scripts.cleanup import Clean
-from scripts.markov import MarkovChain
+from scripts.markov import Markov
 import random
 
 app = Flask(__name__)
 
-file_name = open("cleaned_corpus.txt", "r")
-read_file = file_name.read()
+file_name = "cleaned_corpus.txt"
+data = Clean().clean_text(file_name)
 
 @app.route('/', methods=['GET', 'POST'])
 def hello():
-    marky = Markov(read_file)
-    weighted_markov = marky.weight_markov()
-    sentence = marky.generate_sentence()
+    sentence = Markov().main(data, 10)
     count = read_current_count()
     new_count = write_new_count()
     reset = reset_score()
@@ -128,7 +126,7 @@ def pick_text():
     '''
     Chooses to pick real or fake text before showing it to the user
     '''
-    random_number = randint(1,3)
+    random_number = randint(1,4)
     if random_number == 1:
         f = open("real_tweets.txt", "r")
         tweets = f.read()
@@ -142,9 +140,7 @@ def pick_text():
     else:
         # f = open("transcript.txt", "r")
         # data = f.read()
-        marky = Markov(read_file)
-        weighted_markov = marky.weight_markov()
-        sentence = marky.generate_sentence()
+        sentence = Markov().main(data, 10)
         write_new_guess("False")
         return sentence
 
