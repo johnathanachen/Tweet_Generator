@@ -2,7 +2,7 @@ from scripts.histogram import Dictogram
 import random
 from collections import deque
 import re
-#yeah
+
 class Markov():
 
     def __init__(self):
