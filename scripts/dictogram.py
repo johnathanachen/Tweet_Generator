@@ -1,117 +1,227 @@
-#!python
-from __future__ import division, print_function  # Python 2 and 3 compatibility
-from nltk.tokenize import sent_tokenize
-from pprint import pprint
 import random
-import time
-import sys
+import pickle
+
+from scripts.histogram import Histogram
+from collections import deque
 
 
-class Dictogram(dict):
-    """Dictogram is a histogram implemented as a subclass of the dict type."""
+class Dictogram:
 
-    def __init__(self, word_list=None):
-        """Initialize this histogram as a new dict and count given words."""
-        super(Dictogram, self).__init__()  # Initialize this as a new dict
-        # Add properties to track useful word counts for this histogram
-        self.types = 0  # Count of distinct word types in this histogram
-        self.tokens = 0  # Total count of all word tokens in this histogram
-        # Count words in given list, if any
-        if word_list is not None:
-            for word in word_list:
-                self.add_count(word)
+    def __init__(self, words, order):
+        """ Constructing the Dictogram
 
-    def add_count(self, word, count=1):
-        """Increase frequency count of given word by given count amount."""
-        if word in self:
-            self[word] += count
+        :param words:       The words you want to add (the corpus)
+        :param order:       The Markov Chain order
+        """
+
+        self.forwards = dict()
+        self.backwards = dict()
+        self.word_count = len(words)
+
+        self.data = []
+        self.sentence_starts = []
+        self.sentence_ends = []
+
+        self.construct_data(self.forwards, order, words, False)
+        self.construct_data(self.backwards, order, list(reversed(words)), True)
+        # self.construct_us(words, order)
+
+    def construct_us(self, words, order):
+        orders = []
+        windows = []
+        indexes = []
+
+        reversed_words = list(reversed(words))
+
+        # Go through all orders and construct their information
+        for i in range(1, order + 1):
+            orders.append([dict(), dict()])
+
+            forward_window = deque(words[0: i])
+            backward_window = deque(words[1: i + 1])
+
+            windows.append([forward_window, backward_window])
+            indexes.append(i)
+
+        # Add first word to starting states
+        self.sentence_starts.append(words[0])
+
+        word_length = len(words)
+        while len(words):
+            indexes_length = len(indexes)
+
+            for i in range(indexes_length):
+                index = indexes[i]
+
+                next_word = words[index]
+                backward_word = words[index - order]
+                order_windows = windows[i]
+
+                if len(order_windows[0]) < i + 1:
+                    order_windows[0].append(next_word)
+                    order_windows[1].append(backward_word)
+                    continue
+
+                # If we are in first order and the next word is the end of a sentence list
+                if next_word[-1] == '.':
+                    next_word = next_word[:-1]
+
+                    if i == 1:
+                        # Add the next word to sentence ends
+                        self.sentence_ends.append(next_word)
+
+                        # If we are not at the end of our word list, add our word to start of sentence list
+                        if index + 1 < word_length:
+                            self.sentence_starts.append(words[index + 1])
+
+                # Add for forward chain
+                self.add(orders[i][0], tuple(order_windows[0]), next_word)
+                self.add(orders[i][1], tuple(order_windows[1]), backward_word)
+
+                if words[index][-1] == '.':
+                    windows[i][0].append(next_word)
+                    windows[i][0].popleft()
+                    windows[i][1].append(next_word)
+                    windows[i][1].popleft()
+
+                    self.add(orders[i][0], tuple(order_windows[0]), '[SPLIT]')
+                    self.add(orders[i][1], tuple(order_windows[1]), '[SPLIT]')
+
+                    order_windows[0].clear()
+                    order_windows[1].clear()
+                    continue
+
+                windows[i][0].append(next_word)
+                windows[i][0].popleft()
+                windows[i][1].append(next_word)
+                windows[i][1].popleft()
+
+            # Increment all indexes and if it hits the end we add it to our data
+            for i in range(indexes_length):
+                indexes[i] += 1
+
+                if indexes[i] == word_length:
+                    self.data.insert(0, orders[i])
+                    del indexes[i]
+
+            if 1 > indexes_length:
+                break
+
+    def construct_data(self, data, order, words, backward):
+        creating = False
+
+        words_length = len(words)
+        window = deque(words[0: order])
+
+        if backward and window[0][-1] == '.':
+            window[0] = window[0][:-1]
+
+        # Used to find the start of sentences
+        if backward:
+            self.sentence_ends.append(tuple(window))
         else:
-            self.types +=1
-            self[word] = count
-        self.tokens += count
+            self.sentence_starts.append(tuple(window))
 
-    def frequency(self, word):
-        """Return frequency count of given word, or 0 if word is not found."""
-        if word in self:
-            print("{}: {}".format(word, self[word]))
-            return self[word]
+        # We loop through all our words and if it has occurred we add the following word to a histogram. If it has not
+        # occurred we construct a new histogram
+        for i in range(order, words_length):
+            current_word = words[i]
+
+            if len(window) < order:
+                window.append(current_word)
+                continue
+
+            if creating:
+                if backward:
+                    self.sentence_ends.append(tuple(window))
+                else:
+                    self.sentence_starts.append(tuple(window))
+
+                creating = False
+
+            if self.next_item(data, backward, window, current_word):
+                creating = True
+                window.clear()
+
+                if backward:
+                    window.appendleft(current_word[:-1])
+
+    def next_item(self, data, backward, window, word):
+        split = False
+
+        if word[-1] == '.':
+            if backward:
+                self.next_item(data, backward, window, '[SPLIT]')
+
+                return True
+            else:
+                word = word[:-1]
+                split = True
+
+        # Add current data to our Dictogram
+        self.add(data, tuple(window), word)
+
+        # Add the next number in the sequence
+        window.append(word)
+
+        if backward:
+            window.popleft()
         else:
-            return 0
+            if window.popleft() == '[SPLIT]':
+                data.append(tuple(window))
 
-    def unique_words(self):
-        """ Return words that have a value of one """
-        return [key for key, val in self.item() if val==1]
+        # End of Word
+        if split:
+            self.next_item(data, backward, window, '[SPLIT]')
 
-    def export_histogram(self, histogram_title):
-        """ Create a text file of histogram based on file name """
-        file =  open(histogram_title+'.txt', 'w')
-        for key, val in self.items():
-            string = "{} {}\n".format(key,val)
-            file.write(string)
-        file.close()
+            return True
 
-def weighted_hist(dictogram):
-    """Return a dictionary with value equal to value/tokens"""
-    total = sum([val for val in dictogram.values()])
-    weight_dict = {}
-    for key,val in dictogram.items():
-        weight_dict[key] = val/total
-    return weight_dict
+    def random_start(self, backwards=False):
+        """ Finds a random start to our sentence using the end keys list.
 
-    def counts_dictionary(self):
-        """ Returna a dictionary of counts and words """
-        list_count= {}
-        for key,val in self:
-            print(val)
+        :return:        A key to use in order to construct the start of a sentence
+        """
+        if backwards:
+            return self.sentence_ends[random.randint(0, len(self.sentence_ends) - 1)]
+        else:
+            return self.sentence_starts[random.randint(0, len(self.sentence_starts) - 1)]
 
-def time_diffrence(start_time):
-    """ Returns the time diffrence between the start and time the function is called """
-    return time.time()-start_time
+    def add(self, data, key, value):
+        """ Adds a key-value pair to the data set.
 
-def read_file(file_name):
-    """ Read in text files based on file name """
-    print('This should read the file {} in as text'.format(file_name))
-    with open(file_name) as f:
-        return f.read()
+         :param key:        The word or phrase that we are currently looking at
+         :param value:      The value is the word or phrase following the key
+         """
+
+        # If the word or phrase has not been said before, we create a new histogram for that word.
+        if key not in data:
+            data[key] = Histogram()
+
+        # Update the word phrase in the keys histogram
+        data[key].update_word(value)
+
+    def random_forward_key(self):
+        """ Gets a random word or phrase from our data set """
+        keys = list(self.forwards.keys())
+
+        return keys[random.randint(0, len(keys) - 1)]
+
+    def random_backward_key(self):
+        """ Gets a random word or phrase from our data set """
+        keys = list(self.backwards.keys())
+
+        return keys[random.randint(0, len(keys) - 1)]
+
+    def __str__(self):
+        to_return = ''
+
+        for i in range(len(self.data)):
+            to_return += str(i) + ' ORDER: \nForward:' + str(self.data[i][0]) + '\nBackward:' + str(self.data[i][0]) + '\n'
+
+        return to_return
 
 
-
-
-def print_histogram(word_list):
-    print('word list: {}'.format(word_list))
-    # Create a dictogram and display its contents
-    histogram = Dictogram(word_list)
-    print('dictogram: {}'.format(histogram))
-    print('Weigted dictogram {}'.format(weighted_hist(histogram)))
-    print('{} tokens, {} types'.format(histogram.tokens, histogram.types))
-    for word in word_list[-2:]:
-        freq = histogram.frequency(word)
-        print('{!r} occurs {} times'.format(word, freq))
-
-def stochastic_sampling(weighted_hist):
-    """Randomly choose a word in weighted histogram based on cumulative weights"""
-    rand_percent = random.uniform(0,1)
-    cum_weight = 0
-    for key,token  in weighted_hist.items():
-        cum_weight += token
-        if cum_weight > rand_percent:
-            return key
-def main():
-    arguments = sys.argv[1:]  # Exclude script name in first argument
-    if len(arguments) >= 1:
-        # Test histogram on given arguments
-        print_histogram(arguments)
-    else:
-        # Test histogram on letters in a word
-        word = 'abracadabra'
-        print_histogram(list(word))
-        # Test histogram on words in a classic book title
-        fish_text = 'one fish two fish red fish blue fish'
-        print_histogram(fish_text.split())
-        # Test histogram on words in a long repetitive sentence
-        woodchuck_text = ('how much wood would a wood chuck chuck'
-                          ' if a wood chuck could chuck wood')
-        print_histogram(woodchuck_text.split())
-
-if __name__ == '__main__':
-    main()
+if __name__ == "__main__":
+    with open('data.pickle', 'rb') as handle:
+        test_dict = pickle.load(handle)
+        print(test_dict.random_forward_key())
