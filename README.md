@@ -46,7 +46,3 @@ Avaliable online at https://tweetgendonald.herokuapp.com/
     - `crawler.py` # module for creating lists of tokens from a text
     - `markov.py` # Markov model module generating a sentence word from 81490 Shakespeare corpus
     - `twitter.py` # calling the Twitter API 
-    
-
-
-![](5.png)
